@@ -1,0 +1,20 @@
+Help on module django.template.loader in django.template:
+
+FUNCTIONS     
+    def get_template(template_name, dirs=<object object at
+                     0x000000393DF4C690>, using=None)         
+        Loads and returns a template for the given name.
+        Raises TemplateDoesNotExist if no such template exists.
+
+    def render_to_string(template_name, context=None, context_instance=<object
+                         object at 0x000000393DF4C670>, dirs=<object object at 
+                         0x000000393DF4C690>, dictionary=<object object at 
+                         0x000000393DF4C680>, request=None, using=None)
+    Loads a template and renders it with a context. Returns a string.
+    template_name may be a string or a list of strings.
+
+    def select_template(template_name_list, dirs=<object object at
+                        0x000000393DF4C690>, using=None) 
+        Loads and returns a template for one of the given names.
+        Tries names in order and returns the first template found.
+        Raises TemplateDoesNotExist if no such template exists.

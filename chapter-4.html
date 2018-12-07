@@ -36,11 +36,258 @@ type='text/css'>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>       
 <h1 class="lesson-num">4</h1>
 <h1 class="lesson-title">Rapidly Producing Flexible HTML <br> with Django Templates</h1>              
-<h2 class="second-heading"></h2>
+<h2 class="second-heading">Key Points</h2>
+<ol>
+    <li>Filters</li>
+    <li>Tags</li>
+    <li>Template class</li>
+    <li>Context class</li>
+    <li>loader class</li>
+</ol>
+
+<h2 class="second-heading">Introduction</h2>
+<p>
+    In this chapter, we will discuss Django templates and the methods Django provides to deal with the templates. Templates are simply plain text files that can be in any markup language, but they also include some special syntax so that you can interact with them using Python. The following three constructs mark the specail syntax - 
+    {{ }}, {% %} and {# #}.
+    The first construct is used to specify a variable. The second construct specifies an expression and the third one specifies a comment.
+</p>
+<h2 class="second-heading">Filters</h2>
+<p>
+    Filters are used to modify how the variables are displayed in the templates. Here is a list of all available filters:
+</p>
+    <ul>
+<li>add</li>
+<li>addslashes</li>
+<li>capfirst</li>
+<li>center</li>
+<li>cut</li>
+<li>date</li>
+<li>default</li>
+<li>default_if_none</li>
+<li>dictsort</li>
+<li>dictsortreversed</li>
+<li>divisibleby</li>
+<li>escape</li>
+<li>escapejs</li>
+<li>filesizeformat</li>
+<li>first</li>
+<li>floatformat</li>
+<li>force_escape</li>
+<li>get_digit</li>
+<li>iriencode</li>
+<li>join</li>
+<li>json_script</li>
+<li>last</li>
+<li>length</li>
+<li>length_is</li>
+<li>linebreaks</li>
+<li>linebreaksbr</li>
+<li>linenumbers</li>
+<li>ljust</li>
+<li>lower</li>
+<li>make_list</li>
+<li>phone2numeric</li>
+<li>pluralize</li>
+<li>pprint</li>
+<li>random</li>
+<li>rjust</li>
+<li>safe</li>
+<li>safeseq</li>
+<li>slice</li>
+<li>slugify</li>
+<li>stringformat</li>
+<li>striptags</li>
+<li>time</li>
+<li>timesince</li>
+<li>timeuntil</li>
+<li>title</li>
+<li>truncatechars</li>
+<li>truncatechars_html</li>
+<li>truncatewords</li>
+<li>truncatewords_html</li>
+<li>unordered_list</li>
+<li>upper</li>
+<li>urlencode</li>
+<li>urlize</li>
+<li>urlizetrunc</li>
+<li>wordcount</li>
+<li>wordwrap</li>
+<li>yesno</li>        
+    </ul>
+<p><a href="https://docs.djangoproject.com/en/2.1/ref/templates/builtins/#built-in-filter-reference">This</a> is a link to the documentation.</p>
+
+<h2 class="second-heading">Tags</h2>
+<p>
+    Tags provide arbitrary logic in the rendering process. Most tags take arguments. Some tags require beginning and ending tags. Here is a list of all available tags:
+</p>
+  <ul>
+<li>autoescape</li>
+<li>block</li>
+<li>comment</li>
+<li>csrf_token</li>
+<li>cycle</li>
+<li>debug</li>
+<li>extends</li>
+<li>filter</li>
+<li>firstof</li>
+<li>for</li>
+<li>for … empty</li>
+<li>if</li>
+<li>ifchanged</li>
+<li>include</li>
+<li>load</li>
+<li>lorem</li>
+<li>now</li>
+<li>regroup</li>
+<li>resetcycle</li>
+<li>spaceless</li>
+<li>templatetag</li>
+<li>url</li>
+<li>verbatim</li>
+<li>widthratio</li>
+<li>with</li>
+  </ul>
+<p><a href="https://docs.djangoproject.com/en/2.1/ref/templates/builtins/">This</a> is a link to the documentation.</p>
+
+<h2 class="second-heading">Template class</h2>
+<p>
+    This class can create a template instance in Django. It simply turns a string into a template. It also has a method to render a template. The render() method takes a context as a required positional argument.
+</p>
            
 <pre><code class="language-python">
-              </code></pre>
-    </div>
+Help on class Template in module django.template.base:
+
+class Template(builtins.object)
+  Methods defined here:
+
+  def __init__(self, template_string, origin=None, name=None, engine=None):
+      Initialize self.  See help(type(self)) for accurate signature.
+
+  def __iter__(self):
+
+  def render(self, context):
+      Display stage -- can be called many times
+
+  ----------------------------------------------------------------------
+  Data descriptors defined here:
+
+  __dict__
+      dictionary for instance variables (if defined)
+
+  __weakref__
+      list of weak references to the object (if defined)
+</code></pre>
+
+<h2 class="second-heading">Context class</h2>
+<p>
+    This class can create a context in Django. It turns a dictionary into a context. 
+</p>
+<pre><code class="language-python">
+Help on class Context in module django.template.context:
+
+class Context(BaseContext)
+  A stack container for variable context
+
+  Method resolution order:
+      Context
+      BaseContext
+      builtins.object
+
+  Methods defined here:
+
+  def __copy__(self):
+
+  def __init__(self, dict_=None, autoescape=True, 
+               current_app=< object object at 0x00000036BA23C640>, 
+               use_l10n=None, use_tz=None):
+      Initialize self.  See help(type(self)) for accurate signature.
+
+  def bind_template(self, template):
+
+  def update(self, other_dict):
+      Pushes other_dict to the stack of dictionaries in the Context
+
+  ----------------------------------------------------------------------
+  Methods inherited from BaseContext:
+
+  def __contains__(self, key):
+
+  def __delitem__(self, key):
+      Delete a variable from the current context
+
+  def __eq__(self, other):
+      Compares two contexts by comparing theirs 'dicts' attributes.
+
+  def __getitem__(self, key):
+      Get the value of a variable, starting at the current context 
+      and going upward
+
+  def __iter__(self):
+
+  def __repr__(self):
+      Return repr(self).
+
+  def __setitem__(self, key, value):
+      Set a variable in the current context
+
+  def flatten(self):
+      Returns self.dicts as one dictionary
+
+  def get(self, key, otherwise=None):
+
+  def has_key(self, key):
+
+  def new(self, values=None):
+      Returns a new context with the same properties, but with only the
+      values given in 'values' stored.
+
+  def pop(self):
+
+  def push(self, *args, **kwargs):
+
+  ----------------------------------------------------------------------
+  Data descriptors inherited from BaseContext:
+
+  __dict__
+      dictionary for instance variables (if defined)
+
+  __weakref__
+      list of weak references to the object (if defined)
+
+  ----------------------------------------------------------------------
+  Data and other attributes inherited from BaseContext:
+
+  __hash__ = None
+</code></pre>
+
+<h2 class="second-heading">django.template.loader module</h2> <p>     There are
+three functions defined in this module. Two of them deal with loading a template
+and one of them deals with both loading and rendering a template. </p>
+<pre><code class="language-python"> 
+Help on module django.template.loader in django.template:
+
+FUNCTIONS          
+  def get_template(template_name, dirs=< object object at xyz>,
+                 using=None):                  
+                 Loads and returns a template for the given name.
+                 Raises TemplateDoesNotExist if no such template exists.
+
+  def render_to_string(template_name, context=None,   
+                       context_instance=< object object at xyz>,   
+                       dirs=< object object at xyz>,   
+                       dictionary=< object object at xyz>,   
+                       request=None, using=None): 
+      Loads a template and renders it with a context. Returns a string. 
+      template_name may be a string or a list of strings.
+
+  def select_template(template_name_list, dirs=< object object at xyz>,
+                      using=None):         
+      Loads and returns a template for one of the given names.
+      Tries names in order and returns the first template found.         
+      Raises TemplateDoesNotExist if no such template exists. 
+</code></pre>
+
+</div>
 
     <script src="highlight.pack.js"></script>
     <script>hljs.initHighlightingOnLoad();</script>
