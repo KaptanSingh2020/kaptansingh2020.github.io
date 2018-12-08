@@ -38,11 +38,48 @@ type='text/css'>
 <h1 class="lesson-title">Creating Webpages <br>with Controllers in Django</h1>              
 <h2 class="second-heading">Key Points</h2>
 <ol>
+  <li>URLconf</li>
   <li>View</li>
   <li>HttpRequest</li>
   <li>HttpResponse</li>
   <li>Http404</li>
+  <li>Other Classes in http.response Module</li>
+  <li>Django Shortcut Functions</li>
 </ol>
+<h2 class="second-heading">URLconf</h2>
+<p>
+    To design URLs for an app, you create a Python module informally called a URLconf (URL configuration). This module is pure Python code and is a mapping between URL path expressions to Python functions (your views).<br>
+    This mapping can be as short or as long as needed. It can reference other mappings. And, because it’s pure Python code, it can be constructed dynamically. <br>
+    Here is an example:
+</p>
+<pre><code class="language-python">from django.urls import include, path, re_path
+# Older versions used the following line:
+# from django.conf.urls import include, url
+from django.contrib import admin
+
+urlpatterns = [
+    path('polls/', include('polls.urls')),
+    path('admin/', admin.site.urls),
+]
+</code></pre>
+<p>
+    The include() function allows referencing other URLconfs. Whenever Django encounters include(), it chops off whatever part of the URL matched up to that point and sends the remaining string to the included URLconf for further processing.<br>
+    You should always use include() when you include other URL patterns. admin.site.urls is the only exception to this. <br>
+    Here is another example:
+</p>
+<pre><code class="language-python">from django.urls import path
+
+from . import views
+
+urlpatterns = [
+    path('articles/2003/', views.special_case_2003),
+    path('articles/< int:year>/', views.year_archive),
+    path('articles/< int:year>/< int:month>/', views.month_archive),
+    path('articles/< int:year>/< int:month>/< slug:slug>/', 
+          views.article_detail),
+]
+</code></pre>
+<p><a href="https://docs.djangoproject.com/en/2.1/topics/http/urls/">This </a>is a link to the official documentaion.</p>
 <h2 class="second-heading">View</h2>
 <p>
     A view function, or view for short, is simply a Python function that takes an HTTP request and returns an HTTP response. This response can be the HTML contents of a Web page, or a redirect, or a 404 error, or an XML document, or an image . . . or anything, really. The view itself contains whatever arbitrary logic is necessary to return that response. This code can live anywhere you want, as long as it’s on your Python path. There’s no other requirement–no “magic,” so to speak. For the sake of putting the code somewhere, the convention is to put views in a file called views.py, placed in your project or application directory.
@@ -60,10 +97,122 @@ type='text/css'>
     If you need the response to be streamed from the iterator to the client, you must use the StreamingHttpResponse class instead.
 </p>
 <p><a href="https://docs.djangoproject.com/en/2.1/ref/request-response/#django.http.HttpResponse">This </a>is a link to the documentation.</p>
-           
-<pre><code class="language-python">
-              </code></pre>
-    </div>
+<h2 class="second-heading">Http404</h2>
+<p>
+    For convenience, and because it’s a good idea to have a consistent 404 error page across your site, Django provides an Http404 exception. If you raise Http404 at any point in a view function, Django will catch it and return the standard error page for your application, along with an HTTP error code 404. <br>
+    Here is an example:
+</p>       
+<pre><code class="language-python">from django.http import Http404
+from django.shortcuts import render
+from polls.models import Poll
+
+def detail(request, poll_id):
+    try:
+        p = Poll.objects.get(pk=poll_id)
+    except Poll.DoesNotExist:
+        raise Http404("Poll does not exist")
+    return render(request, 'polls/detail.html', {'poll': p})
+</code></pre>
+<h2 class="second-heading">Other Classes in http.response Module</h2>
+<p>
+    There are many superclasses and subclasses in http.response module. Here is an excerpt from the help text for the http.response module:
+</p>
+<pre><code class="language-python">Help on module django.http.response in django.http:
+
+NAME
+    django.http.response
+
+CLASSES
+    builtins.Exception(builtins.BaseException)
+        Http404
+    builtins.ValueError(builtins.Exception)
+        BadHeaderError
+    builtins.object
+        HttpResponseBase
+            HttpResponse
+                HttpResponseBadRequest
+                HttpResponseForbidden
+                HttpResponseGone
+                HttpResponseNotAllowed
+                HttpResponseNotFound
+                HttpResponseNotModified
+                HttpResponseRedirectBase
+                    HttpResponsePermanentRedirect
+                    HttpResponseRedirect
+                HttpResponseServerError
+                JsonResponse
+            StreamingHttpResponse
+                FileResponse    
+</code></pre>
+<h2 class="second-heading">Django Shortcut Functions</h2>
+<p>
+    The module django.shortcuts collects helper functions and classes that “span” multiple levels of MVC. In other words, these functions/classes introduce controlled coupling for convenience’s sake. <br>
+    Here is the help text for the module django.shortcuts:
+</p>
+<pre><code class="language-python">Help on module django.shortcuts in django:
+
+FUNCTIONS
+
+def get_list_or_404(klass, *args, **kwargs):
+        Uses filter() to return a list of objects, or raise a Http404 
+        exception if the list is empty.
+
+        klass may be a Model, Manager, or QuerySet object. All other passed
+        arguments and keyword arguments are used in the filter() query.
+
+def get_object_or_404(klass, *args, **kwargs):
+        Uses get() to return an object, or raises a Http404 exception if 
+        the object does not exist.
+
+        klass may be a Model, Manager, or QuerySet object. All other passed
+        arguments and keyword arguments are used in the get() query.
+
+        Note: Like with get(), an MultipleObjectsReturned will be raised if
+        more than one object is found.
+
+def redirect(to, *args, **kwargs):
+        Returns an HttpResponseRedirect to the appropriate URL for the 
+        arguments passed.
+
+        The arguments could be:
+        * A model: the model s get_absolute_url() method will be called.
+        * A view name, possibly with arguments: urlresolvers.reverse() 
+          will be used to reverse-resolve the name.
+        * A URL, which will be used as-is for the redirect location.
+
+        By default issues a temporary redirect; pass permanent=True to 
+        issue a permanent redirect
+
+def render(request, template_name, context=None, 
+           context_instance=< object at 0>, content_type=None, status=None, 
+           current_app=< object at 0>, dirs=< object 0>, 
+           dictionary=< object at 0>, using=None):
+        Returns a HttpResponse whose content is filled with the result of 
+        calling template.loader.render_to_string() with the passed arguments.
+        Uses a RequestContext by default.
+
+def render_to_response(template_name, context=None, 
+                       context_instance=< object at 0>, content_type=None, 
+                       status=None, dirs=< object at 0>, 
+                       dictionary=< object at 0>, using=None):
+        Returns a HttpResponse whose content is filled with the result of 
+        calling django.template.loader.render_to_string() with the passed 
+        arguments.
+
+def resolve_url(to, *args, **kwargs):
+        Return a URL appropriate for the arguments passed.
+
+        The arguments could be:
+        * A model: the model s get_absolute_url() function will be called.
+        * A view name, possibly with arguments: urlresolvers.reverse() will
+          be used to reverse-resolve the name.
+        * A URL, which will be returned as-is.    
+</code></pre>
+<p><a href="https://docs.djangoproject.com/en/2.1/topics/http/shortcuts/">This</a>
+ is a link to the docs. <br>
+ <a href="https://docs.djangoproject.com/en/2.1/_modules/django/shortcuts/">This</a>
+ is a link to the code.</p>
+</div>
 
     <script src="highlight.pack.js"></script>
     <script>hljs.initHighlightingOnLoad();</script>
