@@ -1,20 +1,108 @@
-Help on module django.template.loader in django.template:
+Help on class HttpResponse in module django.http.response:
 
-FUNCTIONS     
-    def get_template(template_name, dirs=<object object at
-                     0x000000393DF4C690>, using=None)         
-        Loads and returns a template for the given name.
-        Raises TemplateDoesNotExist if no such template exists.
-
-    def render_to_string(template_name, context=None, context_instance=<object
-                         object at 0x000000393DF4C670>, dirs=<object object at 
-                         0x000000393DF4C690>, dictionary=<object object at 
-                         0x000000393DF4C680>, request=None, using=None)
-    Loads a template and renders it with a context. Returns a string.
-    template_name may be a string or a list of strings.
-
-    def select_template(template_name_list, dirs=<object object at
-                        0x000000393DF4C690>, using=None) 
-        Loads and returns a template for one of the given names.
-        Tries names in order and returns the first template found.
-        Raises TemplateDoesNotExist if no such template exists.
+class HttpResponse(HttpResponseBase)
+ |  An HTTP response class with a string as content.
+ |
+ |  This content that can be read, appended to or replaced.
+ |
+ |  Method resolution order:
+ |      HttpResponse
+ |      HttpResponseBase
+ |      builtins.object
+ |
+ |  Methods defined here:
+ |
+ |  __bytes__ = serialize(self)
+ |
+ |  __init__(self, content=b'', *args, **kwargs)
+ |      Initialize self.  See help(type(self)) for accurate signature.
+ |
+ |  __iter__(self)
+ |
+ |  getvalue(self)
+ |
+ |  serialize(self)
+ |      Full HTTP message, including headers, as a bytestring.
+ |
+ |  tell(self)
+ |
+ |  writable(self)
+ |
+ |  write(self, content)
+ |
+ |  writelines(self, lines)
+ |
+ |  ----------------------------------------------------------------------
+ |  Data descriptors defined here:
+ |
+ |  content
+ |
+ |  ----------------------------------------------------------------------
+ |  Data and other attributes defined here:
+ |
+ |  streaming = False
+ |
+ |  ----------------------------------------------------------------------
+ |  Methods inherited from HttpResponseBase:
+ |
+ |  __contains__ = has_header(self, header)
+ |      Case-insensitive check for a header.
+ |
+ |  __delitem__(self, header)
+ |
+ |  __getitem__(self, header)
+ |
+ |  __setitem__(self, header, value)
+ |
+ |  close(self)
+ |      # The WSGI server must call this method upon completion of the request.
+ |      # See http://blog.dscpl.com.au/2012/10/obligations-for-calling-close-on.html
+ |
+ |  delete_cookie(self, key, path='/', domain=None)
+ |
+ |  flush(self)
+ |
+ |  get(self, header, alternate=None)
+ |
+ |  has_header(self, header)
+ |      Case-insensitive check for a header.
+ |
+ |  items(self)
+ |
+ |  make_bytes(self, value)
+ |      Turn a value into a bytestring encoded in the output charset.
+ |
+ |  serialize_headers(self)
+ |      HTTP headers as a bytestring.
+ |
+ |  set_cookie(self, key, value='', max_age=None, expires=None, path='/', domain=None, secure=False, httponly=False)
+ |      Sets a cookie.
+ |
+ |      ``expires`` can be:
+ |      - a string in the correct format,
+ |      - a naive ``datetime.datetime`` object in UTC,
+ |      - an aware ``datetime.datetime`` object in any time zone.
+ |      If it is a ``datetime.datetime`` object then ``max_age`` will be calculated.
+ |
+ |  set_signed_cookie(self, key, value, salt='', **kwargs)
+ |
+ |  setdefault(self, key, value)
+ |      Sets a header unless it has already been set.
+ |
+ |  ----------------------------------------------------------------------
+ |  Data descriptors inherited from HttpResponseBase:
+ |
+ |  __dict__
+ |      dictionary for instance variables (if defined)
+ |
+ |  __weakref__
+ |      list of weak references to the object (if defined)
+ |
+ |  charset
+ |
+ |  ----------------------------------------------------------------------
+ |  Data and other attributes inherited from HttpResponseBase:
+ |
+ |  reason_phrase = None
+ |
+ |  status_code = 200

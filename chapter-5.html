@@ -35,8 +35,31 @@ type='text/css'>
         </div>  
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>       
 <h1 class="lesson-num">5</h1>
-<h1 class="lesson-title">Creating Webpages with Controllers <br> in Django</h1>              
-<h2 class="second-heading"></h2>
+<h1 class="lesson-title">Creating Webpages <br>with Controllers in Django</h1>              
+<h2 class="second-heading">Key Points</h2>
+<ol>
+  <li>View</li>
+  <li>HttpRequest</li>
+  <li>HttpResponse</li>
+  <li>Http404</li>
+</ol>
+<h2 class="second-heading">View</h2>
+<p>
+    A view function, or view for short, is simply a Python function that takes an HTTP request and returns an HTTP response. This response can be the HTML contents of a Web page, or a redirect, or a 404 error, or an XML document, or an image . . . or anything, really. The view itself contains whatever arbitrary logic is necessary to return that response. This code can live anywhere you want, as long as it’s on your Python path. There’s no other requirement–no “magic,” so to speak. For the sake of putting the code somewhere, the convention is to put views in a file called views.py, placed in your project or application directory.
+</p>
+<h2 class="second-heading">HttpRequest object</h2>
+<p>
+    An HttpRequest object contains all of the information about the page requested, any data the user is passing to the website, and any data the browser is sending about the user. It has many attributes and methods. 
+</p>
+<p><a href="https://docs.djangoproject.com/en/2.1/ref/request-response/#django.http.HttpRequest">This </a>is a link to the documentation.</p>
+<h2 class="second-heading">HttpResponse object</h2>
+<p>
+    In contrast to HttpRequest objects, which are created automatically by Django, HttpResponse objects are your responsibility. Each view you write is responsible for instantiating, populating, and returning an HttpResponse.
+    The HttpResponse class lives in the django.http module. Typical usage is to pass the contents of the page, as a string, to the HttpResponse constructor. But if you want to add content incrementally, you can use response as a file-like object. Finally, you can pass HttpResponse an iterator rather than strings. HttpResponse will consume the iterator immediately, store its content as a string, and discard it. Objects with a close() method such as files and generators are immediately closed.
+
+    If you need the response to be streamed from the iterator to the client, you must use the StreamingHttpResponse class instead.
+</p>
+<p><a href="https://docs.djangoproject.com/en/2.1/ref/request-response/#django.http.HttpResponse">This </a>is a link to the documentation.</p>
            
 <pre><code class="language-python">
               </code></pre>
