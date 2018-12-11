@@ -10,7 +10,6 @@ rel="stylesheet">
 </head>   
 <body>     
 <div class="main-container">
-     
 <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' 
 type='text/css'>    
         <div class="screen">
@@ -18,13 +17,12 @@ type='text/css'>
             <div class="circle"></div>
             <div class="menu">
                 <ul>
-                    <li><a href="index.html">Home</a></li>
+                    <li><a href="index.html" id="home">Home</a></li>
+                    <li><a href="chapter-3.html">Models</a></li>
                     <li><a href="chapter-4.html">Django Templates</a></li>
                     <li><a href="chapter-5.html">URLs and Views</a></li>
-                    <li><a href="">6</a></li>
-                    <li><a href="">7</a></li>
-                    <li><a href="">8</a></li>
-                    <li><a href="">9</a></li>
+                    <li><a href="chapter-6.html">Links and Redirects</a></li>
+                    <li><a href="chapter-7.html">7</a></li>
                 </ul>
             </div>                      
             <div class="burger">
@@ -35,306 +33,41 @@ type='text/css'>
 
         </div>  
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>       
-<h1 class="lesson-num">3</h1>       
-<h1 class="lesson-title">Programming Django
-Models<br> and Creating an SQLite Database</h1>       
-<h2 class="second-heading">Key Points</h2>       
-<ol>         
-  <li>Model Field Types</li>
-  <li>Model Field Options</li>         
-  <li>Model Metadata</li>         
-  <li>Model Methods</li>         
-  <li>Model Relationships</li>         
-  <li>Model Manager Methods</li>         
-  <li>Queryset Methods</li>         
-  <li>Related Manager Methods</li>
-  <li>Model Field Lookups</li>       
-</ol>       
-<h2 class="second-heading">Introduction</h2>
-<p>         
-  A model is a description of how your data is saved to the database.
-It also has methods to validate raw data and methods to interact with the data
-in the database. A model has different fields for different types of data and each field may have one or more options that help with data validation and/or presentation.         
-A model may also have a special class named Meta, which is used to control the behaviour of the model. A model can also have methods that can help with processing or presentaion of the data.
-Models can relate to each other in different ways. We need to use an appropriate relation field on one of the two related models. There are only three types of relationships in Django.          
-Each model has a model manager that has methods to interact with the database. If a model has a relation field, it will also have a related manager in addition to the model manager. In fact, that relation field will be the related manager. When we use a model manager or related manager to retrieve data from the database, it is usually returned in the form of a queryset, which is a list-like data structure. The queryset has many methods, most of which are shared with the model manager.
-</p>             
-<h2 class="second-heading">Field Types and Options</h2>
-<p>There are around 30 types of fields for different types of
-data. Here is an example:</p>               
-<pre><code class="language-python"> 
-class Post(models.Model):     
-    title = models.CharField(max_length=63)     
-    slug = models.SlugField(max_length=63,          
-                            help_text='a label for URL config',
-                            unique_for_month='pub_date')     
-    text = models.TextField()     
-    pub_date = models.DateField('date published', 
-                                auto_now_add=True)     
-    tags = models.ManyToManyField(Tag, related_name='blog_posts')     
-    startups = models.ManyToManyField(Startup, related_name='blog_posts') 
-    
-    def __str__(self):
-        return "{} on {}".format(self.title, 
-                                 self.pub_date.strftime('%Y-%m-%d'))
+<h1 class="lesson-num">0</h1>
+<h1 class="lesson-title">Learning Django</h1>              
 
-    def get_absolute_url(self):
-        return reverse('blog_post_detail', args=(self.pub_date.year, 
-                                                 self.pub_date.month, 
-                                                 self.slug))
+<h2 class="second-heading">What is Django?</h2>
+<p>Django is a high-level Python web framework that enables rapid development of secure and maintainable websites. Built by experienced developers, Django takes care of much of the hassle of web development, so you can focus on writing your app without needing to reinvent the wheel. It is free and open source, has a thriving and active community, great documentation, and many options for free and paid-for support. </p>
 
-    class Meta:
-        verbose_name = 'blog post'
-        ordering = ['-pub_date', 'title']
-        get_latest_by = 'pub_date'
-              </code></pre>
-<p>Here is a list of all field types and options:</p>
-  <h3 class='third-heading'>Field Types</h3>
-  <ul>
-    <li>AutoField</li> 
-    <li>BigAutoField</li>
-    <li>BigIntegerField</li>
-    <li>BinaryField</li>
-    <li>BooleanField</li>
-    <li>CharField</li>
-    <li>DateField</li>
-    <li>DateTimeField</li>
-    <li>DecimalField</li>
-    <li>DurationField</li>
-    <li>EmailField</li>
-    <li>FileField</li>
-    <li>FilePathField</li>
-    <li>FloatField</li>
-    <li>ImageField</li>
-    <li>IntegerField</li>
-    <li>GenericIPAddressField</li>
-    <li>NullBooleanField</li>
-    <li>PositiveIntegerField</li>
-    <li>PositiveSmallIntegerField</li>
-    <li>SlugField</li>
-    <li>SmallIntegerField</li>
-    <li>TextField</li>
-    <li>TimeField</li>
-    <li>URLField</li>
-    <li>UUIDField</li>
-    <li>ForeignKey</li>
-    <li>ManyToManyField</li>
-    <li>OneToOneField</li>
-  </ul>
-  <h3 class="third-heading">Field Options</h3>
-  <ul>
-    <li>null</li>
-    <li>blank</li>
-    <li>choices</li>
-    <li>db_column</li>
-    <li>db_index</li>
-    <li>db_tablespace</li>
-    <li>default</li>
-    <li>editable</li>
-    <li>error_messages</li>
-    <li>help_text</li>
-    <li>primary_key</li>
-    <li>unique</li>
-    <li>unique_for_date</li>
-    <li>unique_for_month</li>
-    <li>unique_for_year</li>
-    <li>verbose_name</li>
-    <li>validators</li>
-  </ul>
-<p><a href="https://docs.djangoproject.com/en/2.1/ref/models/fields/">This</a> is a link to the documentation where you can find all the details of the model field types and options.<br>
-<a href="model_instance_help.html">This</a> is a link to Help on class Model itself.
-</p>
-<h2 class="second-heading">Metadata</h2>
-<p>Here is a list of all possible metadata options that can be used for a model
-in its internal class Meta:</p>
-  <ul>
-    <li>abstract</li>
-    <li>app_label</li>
-    <li>base_manager_name</li>
-    <li>db_table</li>
-    <li>db_tablespace</li>
-    <li>default_manager_name</li>
-    <li>default_related_name</li>
-    <li>get_latest_by</li>
-    <li>managed</li>
-    <li>order_with_respect_to</li>
-    <li>ordering</li>
-    <li>permissions</li>
-    <li>default_permissions</li>
-    <li>proxy</li>
-    <li>required_db_features</li>
-    <li>required_db_vendor</li>
-    <li>select_on_save</li>
-    <li>indexes</li>
-    <li>unique_together</li>
-    <li>index_together</li>
-    <li>verbose_name</li>
-    <li>verbose_name_plural</li>
-    <li>label</li>
-    <li>label_lower</li>
-  </ul>
-<p><a href="https://docs.djangoproject.com/en/2.1/ref/models/options/">This</a> is a link to the documentation where you can find all the details of the model meta options.
-</p>
-<h2 class="second-heading">Methods</h2>
-<p>
-    A model is a Python class, so it can have a method defined on it. You are not required to define any methods
-    for your models, however, there are some useful methods that you may want to define on your models. Two of the
-    most common and useful methods are __str__ and get_absolute_url, both of which are used in the example given above. 
-    We will discuss this topic in more detail later.
-</p>
-<h2 class="second-heading">Relationships</h2>
-<p>
-    There are three types of model relationships in Django. An object can be related to one other object. It is a OneToOne relationship. An object can be related to many other objects. It is a ManyToOne relationship. Many objects can be related to many other objects. It is a ManyToMany relationship. These relationships are expressed by OneToOneField, ForeignKey and ManyToManyField field types respectively. ForeignKey must be added to the many side of the relationship. In the other two cases, you have a choice.
-<p>Here are the links to the documentation where you can find all the details of the model relationships:<br>
-<a href="https://docs.djangoproject.com/en/2.1/topics/db/examples/one_to_one/">OneToOne Relationships</a><br>
-<a href="https://docs.djangoproject.com/en/2.1/topics/db/examples/many_to_one/">ManyToOne Relationships</a><br>
-<a href="https://docs.djangoproject.com/en/2.1/topics/db/examples/many_to_many/">ManyToMany Relationships</a>
-</p>
-<h2 class="second-heading">Managers</h2>
-<h3 class="third-heading">Manager Methods</h3>
-<ul>
-    <li>aggregate</li>
-    <li>annotate</li>
-    <li>bulk_create</li>
-    <li>complex_filter</li>
-    <li>count</li>
-    <li>create</li>
-    <li>dates</li>
-    <li>datetimes</li>
-    <li>defer</li>
-    <li>distinct</li>
-    <li>earliest</li>
-    <li>exclude</li>
-    <li>exists</li>
-    <li>extra</li>
-    <li>filter</li>
-    <li>first</li>
-    <li>get</li>
-    <li>get_or_create</li>
-    <li>in_bulk</li>
-    <li>iterator</li>
-    <li>last</li>
-    <li>latest</li>
-    <li>none</li>
-    <li>only</li>
-    <li>order_by</li>
-    <li>prefetch_related</li>
-    <li>raw</li>
-    <li>reverse</li>
-    <li>select_for_update</li>
-    <li>select_related</li>
-    <li>update</li>
-    <li>update_or_create</li>
-    <li>using</li>
-    <li>values</li>
-    <li>values_list</li>
-    <li>all</li>
-    <li>check</li>
-    <li>contribute_to_class</li>
-    <li>db_manager</li>
-    <li>deconstruct</li>
-    <li>get_queryset</li>
-</ul>
-<p>
-    <a href="manager_help.html">Here</a> is a link to Help on Managers. We will discuss the topic
-    in more detail later.
-</p>
-<h2 class="second-heading">QuerySets</h2>
-<h3 class="third-heading">QuerySet methods that return new QuerySets</h3>
-<ul>
-    <li>filter</li>
-    <li>exclude</li>
-    <li>annotate</li>
-    <li>order_by</li>
-    <li>reverse</li>
-    <li>distinct</li>
-    <li>values</li>
-    <li>values_list</li>
-    <li>dates</li>
-    <li>datetimes</li>
-    <li>none</li>
-    <li>all</li>
-    <li>union</li>
-    <li>intersection</li>
-    <li>difference</li>
-    <li>select_related</li>
-    <li>prefetch_related</li>
-    <li>extra</li>
-    <li>defer</li>
-    <li>only</li>
-    <li>using</li>
-    <li>select_for_update</li>
-    <li>raw</li>
-</ul>
-<h3 class="third-heading">QuerySet methods that do not return QuerySets</h3>
-<ul>
-    <li>get</li>
-    <li>create</li>
-    <li>get_or_create</li>
-    <li>update_or_create</li>
-    <li>bulk_create</li>
-    <li>count</li>
-    <li>in_bulk</li>
-    <li>iterator</li>
-    <li>latest</li>
-    <li>earliest</li>
-    <li>first</li>
-    <li>last</li>
-    <li>aggregate</li>
-    <li>exists</li>
-    <li>update</li>
-    <li>delete</li>
-    <li>as_manager</li>
-    <li>explain</li>
-</ul>
-<p><a href="queryset_help.html">Here</a> is a link to Help on QuerySets. We will discuss the topic
-    in more detail later.<br>
-    <a href="https://docs.djangoproject.com/en/2.1/ref/models/querysets/">This</a> is a link to the documentation where you can find all the details about QuerySets.
-</p>
-<h2 class="second-heading">Related Managers</h2>
-<p>
-    A “related manager” is a manager used in a one-to-many or many-to-many related context. A related manager has very few methods. A related manager has add(), create(), remove(), clear(), and set() methods. All of these methods apply database changes immediately for all types of related fields. In other words, there is no need to call save() on either end of the relationship.<br>
-    <a href="https://docs.djangoproject.com/en/2.1/ref/models/relations/">This</a> is a link to the documentation where you can find all the details about the related manager. 
-</p>
-<h2 class="second-heading">Field Lookups</h2>
-<p>
-    Field lookups are how you specify the meat of an SQL WHERE clause. They’re specified as keyword arguments to the QuerySet methods filter(), exclude() and get().<br>
-    Here is a list of all built-in lookups:
-</p>
-<ul>
-    <li>exact</li>
-    <li>iexact</li>
-    <li>contains</li>
-    <li>icontains</li>
-    <li>in</li>
-    <li>gt</li>
-    <li>gte</li>
-    <li>lt</li>
-    <li>lte</li>
-    <li>startswith</li>
-    <li>istartswith</li>
-    <li>endswith</li>
-    <li>iendswith</li>
-    <li>range</li>
-    <li>date</li>
-    <li>year</li>
-    <li>month</li>
-    <li>day</li>
-    <li>week</li>
-    <li>week_day</li>
-    <li>quarter</li>
-    <li>time</li>
-    <li>hour</li>
-    <li>minute</li>
-    <li>second</li>
-    <li>isnull</li>
-    <li>regex</li>
-    <li>iregex</li>
-</ul>
-<p>
-    <a href="https://docs.djangoproject.com/en/2.1/ref/models/querysets/">This</a> is a link to the documentation where you can find all the details about model field lookups.<br><br>
-</p>
+<p>Django helps you write software that is:</p>
 
+<h3 class="third-heading">Complete</h3>
+<p>Django follows the &quot;Batteries included&quot; philosophy and provides almost everything developers might want to do &quot;out of the box&quot;. Because everything you need is part of the one &quot;product&quot;, it all works seamlessly together, follows consistent design principles, and has extensive and up-to-date documentation.</p> 
+<h3 class="third-heading">Versatile</h3> 
+<p>Django can be (and has been) used to build almost any type of website &mdash; from content management systems and wikis, through to social networks and news sites. It can work with any client-side framework, and can deliver content in almost any format (including HTML, RSS feeds, JSON, XML, etc). The site you are currently reading is based on Django!</p>
+
+<p>Internally, while it provides choices for almost any functionality you might want (e.g. several popular databases, templating engines, etc.), it can also be extended to use other components if needed. 
+<h3 class="third-heading">Secure</h3> 
+<p>Django helps developers avoid many common security mistakes by providing a framework that has been engineered to &quot;do the right things&quot; to protect the website automatically. For example, Django provides a secure way to manage user accounts and passwords, avoiding common mistakes like putting session information in cookies where it is vulnerable (instead cookies just contain a key, and the actual data is stored in the database) or directly storing passwords rather than a password hash.</p>
+
+<p>A password hash is a fixed-length value created by sending the password through a cryptographic hash function. Django can check if an entered password is correct by running it through the hash function and comparing the output to the stored hash value. However due to the &quot;one-way&quot; nature of the function, even if a stored hash value is compromised it is hard for an attacker to work out the original password.</p>
+
+<p>Django enables protection against many vulnerabilities by default, including SQL injection, cross-site scripting, cross-site request forgery and clickjacking (see Website security for more details of such attacks). 
+<h3 class="third-heading">Scalable</h3> 
+<p>Django uses a component-based &ldquo;shared-nothing&rdquo; architecture (each part of the architecture is independent of the others, and can hence be replaced or changed if needed). Having a clear separation between the different parts means that it can scale for increased traffic by adding hardware at any level: caching servers, database servers, or application servers. Some of the busiest sites have successfully scaled Django to meet their demands (e.g. Instagram and Disqus, to name just two).</p> 
+<h3 class="third-heading">Maintainable</h3> 
+<p>Django code is written using design principles and patterns that encourage the creation of maintainable and reusable code. In particular, it makes use of the Don't Repeat Yourself (DRY) principle so there is no unnecessary duplication, reducing the amount of code. Django also promotes the grouping of related functionality into reusable &quot;applications&quot; and, at a lower level, groups related code into modules (along the lines of the Model View Controller (MVC) pattern).</p> 
+<h3 class="third-heading">Portable</h3>
+<p>Django is written in Python, which runs on many platforms. That means that you are not tied to any particular server platform, and can run your applications on many flavours of Linux, Windows, and Mac OS X. Furthermore, Django is well-supported by many web hosting providers, who often provide specific infrastructure and documentation for hosting Django sites.</p> 
+<h2 class="second-heading">Where did it come from?</h2>
+<p>Django was initially developed between 2003 and 2005 by a web team who were responsible for creating and maintaining newspaper websites. After creating a number of sites, the team began to factor out and reuse lots of common code and design patterns. This common code evolved into a generic web development framework, which was open-sourced as the &quot;Django&quot; project in July 2005. </p>
+
+<p>Django has continued to grow and improve, from its first milestone release (1.0) in September 2008 through to the recently-released version 2.0 (2017). Each release has added new functionality and bug fixes, ranging from support for new types of databases, template engines, and caching, through to the addition of &quot;generic&quot; view functions and classes (which reduce the amount of code that developers have to write for a number of programming tasks).</p>
+
+<p><a href="https://developer.mozilla.org/en-US/docs/Learn/Server-side/Django/Introduction">This</a> is a link to an introduction to Django by Mozilla.org.</p>
+<p>&nbsp;</p>
+
+           
     </div>
 
     <script src="highlight.pack.js"></script>

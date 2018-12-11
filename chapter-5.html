@@ -17,12 +17,12 @@ type='text/css'>
             <div class="circle"></div>
             <div class="menu">
                 <ul>
-                    <li><a href="index.html">Home</a></li>
+                    <li><a href="index.html" id="home">Home</a></li>
+                    <li><a href="chapter-3.html">Models</a></li>
                     <li><a href="chapter-4.html">Django Templates</a></li>
                     <li><a href="chapter-5.html">URLs and Views</a></li>
-                    <li><a href="chapter-7.html">7</a></li>
-                    <li><a href="chapter-8.html">8</a></li>
-                    <li><a href="chapter-9.html">9</a></li>
+                    <li><a href="chapter-6.html">Links and Redirects</a></li>
+                    <li><a href="">7</a></li>
                 </ul>
             </div>                      
             <div class="burger">
@@ -37,13 +37,14 @@ type='text/css'>
 <h1 class="lesson-title">Creating Webpages <br>with Controllers in Django</h1>              
 <h2 class="second-heading">Key Points</h2>
 <ol>
-  <li>URLconf</li>
-  <li>View</li>
-  <li>HttpRequest</li>
-  <li>HttpResponse</li>
+  <li>URLconfs</li>
+  <li>Views</li>
+  <li>HttpRequest Objects</li>
+  <li>HttpResponse Objects</li>
   <li>Http404</li>
   <li>Other Classes in http.response Module</li>
   <li>Django Shortcut Functions</li>
+  <li>Class-based Views</li>
 </ol>
 <h2 class="second-heading">URLconf</h2>
 <p>
@@ -51,7 +52,8 @@ type='text/css'>
     This mapping can be as short or as long as needed. It can reference other mappings. And, because it’s pure Python code, it can be constructed dynamically. <br>
     Here is an example:
 </p>
-<pre><code class="language-python">from django.urls import include, path, re_path
+<pre><code class="language-python">
+from django.urls import include, path, re_path
 # Older versions used the following line:
 # from django.conf.urls import include, url
 from django.contrib import admin
@@ -60,13 +62,15 @@ urlpatterns = [
     path('polls/', include('polls.urls')),
     path('admin/', admin.site.urls),
 ]
+
 </code></pre>
 <p>
     The include() function allows referencing other URLconfs. Whenever Django encounters include(), it chops off whatever part of the URL matched up to that point and sends the remaining string to the included URLconf for further processing.<br>
     You should always use include() when you include other URL patterns. admin.site.urls is the only exception to this. <br>
     Here is another example:
 </p>
-<pre><code class="language-python">from django.urls import path
+<pre><code class="language-python">
+from django.urls import path
 
 from . import views
 
@@ -77,6 +81,7 @@ urlpatterns = [
     path('articles/< int:year>/< int:month>/< slug:slug>/', 
           views.article_detail),
 ]
+
 </code></pre>
 <p><a href="https://docs.djangoproject.com/en/2.1/topics/http/urls/">This </a>is a link to the official documentaion.</p>
 <h2 class="second-heading">View</h2>
@@ -101,7 +106,8 @@ urlpatterns = [
     For convenience, and because it’s a good idea to have a consistent 404 error page across your site, Django provides an Http404 exception. If you raise Http404 at any point in a view function, Django will catch it and return the standard error page for your application, along with an HTTP error code 404. <br>
     Here is an example:
 </p>       
-<pre><code class="language-python">from django.http import Http404
+<pre><code class="language-python">
+from django.http import Http404
 from django.shortcuts import render
 from polls.models import Poll
 
@@ -111,12 +117,14 @@ def detail(request, poll_id):
     except Poll.DoesNotExist:
         raise Http404("Poll does not exist")
     return render(request, 'polls/detail.html', {'poll': p})
+
 </code></pre>
 <h2 class="second-heading">Other Classes in http.response Module</h2>
 <p>
     There are many superclasses and subclasses in http.response module. Here is an excerpt from the help text for the http.response module:
 </p>
-<pre><code class="language-python">Help on module django.http.response in django.http:
+<pre><code class="language-python">
+Help on module django.http.response in django.http:
 
 NAME
     django.http.response
@@ -142,13 +150,15 @@ CLASSES
                 JsonResponse
             StreamingHttpResponse
                 FileResponse    
+
 </code></pre>
 <h2 class="second-heading">Django Shortcut Functions</h2>
 <p>
     The module django.shortcuts collects helper functions and classes that “span” multiple levels of MVC. In other words, these functions/classes introduce controlled coupling for convenience’s sake. <br>
     Here is the help text for the module django.shortcuts:
 </p>
-<pre><code class="language-python">Help on module django.shortcuts in django:
+<pre><code class="language-python">
+Help on module django.shortcuts in django:
 
 FUNCTIONS
 
@@ -206,11 +216,151 @@ def resolve_url(to, *args, **kwargs):
         * A view name, possibly with arguments: urlresolvers.reverse() will
           be used to reverse-resolve the name.
         * A URL, which will be returned as-is.    
+
 </code></pre>
 <p><a href="https://docs.djangoproject.com/en/2.1/topics/http/shortcuts/">This</a>
  is a link to the docs. <br>
  <a href="https://docs.djangoproject.com/en/2.1/_modules/django/shortcuts/">This</a>
  is a link to the code.</p>
+
+<h2 class="second-heading">Class-based Views</h2>
+<p>
+    Class-based views provide an alternative way to implement views as Python objects instead of functions. They do not replace function-based views, but have certain differences and advantages when compared to function-based views. <br>
+    At its core, a class-based view allows you to respond to different HTTP request methods with different class instance methods, instead of with conditionally branching code inside a single view function. <br>
+
+    So where the code to handle HTTP GET in a view function would look something like:
+</p>
+<pre><code class="language-python">
+from django.http import HttpResponse
+
+def my_view(request):
+    if request.method == 'GET':
+        # <view logic>
+        return HttpResponse('result')
+
+</code></pre>
+<p>
+    In a class-based view, this would become:
+</p>
+<pre><code class="language-python">
+from django.http import HttpResponse
+from django.views import View
+
+class MyView(View):
+    def get(self, request):
+        # <view logic>
+        return HttpResponse('result')
+
+</code></pre>
+<p>
+    Because Django’s URL resolver expects to send the request and associated arguments to a callable function, not a class, class-based views have an as_view() class method which returns a function that can be called when a request arrives for a URL matching the associated pattern. The function creates an instance of the class and calls its dispatch() method. dispatch looks at the request to determine whether it is a GET, POST, etc, and relays the request to a matching method if one is defined, or raises HttpResponseNotAllowed if not:
+</p>
+<pre><code class="language-python">
+from django.urls import path
+from myapp.views import MyView
+
+urlpatterns = [
+    path('about/', MyView.as_view()),
+]
+
+</code></pre>
+<p>
+    It is worth noting that what your method returns is identical to what you return from a function-based view, namely some form of HttpResponse. This means that http shortcuts or TemplateResponse objects are valid to use inside a class-based view. <br>
+
+    While a minimal class-based view does not require any class attributes to perform its job, class attributes are useful in many class-based designs, and there are two ways to configure or set class attributes. <br>
+
+    The first is the standard Python way of subclassing and overriding attributes and methods in the subclass. So that if your parent class had an attribute greeting like this:
+</p>
+<pre><code class="language-python">
+from django.http import HttpResponse
+from django.views import View
+
+class GreetingView(View):
+    greeting = "Good Day"
+
+    def get(self, request):
+        return HttpResponse(self.greeting)
+    
+</code></pre>
+<p>
+    You can override that in a subclass:
+</p>
+<pre><code class="language-python">
+class MorningGreetingView(GreetingView):
+    greeting = "Morning to ya"
+
+</code></pre>
+<p>
+    Another option is to configure class attributes as keyword arguments to the as_view() call in the URLconf:
+</p>
+<pre><code class="language-python">
+urlpatterns = [
+    path('about/', GreetingView.as_view(greeting="G'day")),
+]
+
+</code></pre>
+<h3 class="third-heading">Decorating Class-based Views</h3>
+<p>
+    The simplest way of decorating class-based views is to decorate the result of the as_view() method. The easiest place to do this is in the URLconf where you deploy your view:
+</p>
+<pre><code class="language-python">
+from django.contrib.auth.decorators import login_required, permission_required
+from django.views.generic import TemplateView
+
+from .views import VoteView
+
+urlpatterns = [
+    path('about/', 
+          login_required(TemplateView.as_view(template_name="secret.html"))),
+    path('vote/', permission_required('polls.can_vote')(VoteView.as_view())),
+]
+
+</code></pre>
+<p>
+    This approach applies the decorator on a per-instance basis. If you want every instance of a view to be decorated, you need to take a different approach. <br>
+    To decorate every instance of a class-based view, you need to decorate the class definition itself. To do this you apply the decorator to the dispatch() method of the class. <br>
+
+    A method on a class isn’t quite the same as a standalone function, so you can’t just apply a function decorator to the method – you need to transform it into a method decorator first. The method_decorator decorator transforms a function decorator into a method decorator so that it can be used on an instance method. For example:
+</p>
+<pre><code class="language-python">
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+from django.views.generic import TemplateView
+
+class ProtectedView(TemplateView):
+    template_name = 'secret.html'
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
+
+</code></pre>
+<p>
+    Or, more succinctly, you can decorate the class instead and pass the name of the method to be decorated as the keyword argument name:
+</p>
+<pre><code class="language-python">
+@method_decorator(login_required, name='dispatch')
+class ProtectedView(TemplateView):
+    template_name = 'secret.html'
+
+</code></pre>
+<p>
+    If you have a set of common decorators used in several places, you can define a list or tuple of decorators and use this instead of invoking method_decorator() multiple times. These two classes are equivalent:
+</p>
+<pre><code class="language-python">
+decorators = [never_cache, login_required]
+
+@method_decorator(decorators, name='dispatch')
+class ProtectedView(TemplateView):
+    template_name = 'secret.html'
+
+@method_decorator(never_cache, name='dispatch')
+@method_decorator(login_required, name='dispatch')
+class ProtectedView(TemplateView):
+    template_name = 'secret.html'
+
+</code></pre>
+<p>&nbsp;</p>
 </div>
 
     <script src="highlight.pack.js"></script>

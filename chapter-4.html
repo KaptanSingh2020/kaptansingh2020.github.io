@@ -17,13 +17,12 @@ type='text/css'>
             <div class="circle"></div>
             <div class="menu">
                 <ul>
-                    <li><a href="index.html">Home</a></li>
+                    <li><a href="index.html" id="home">Home</a></li>
+                    <li><a href="chapter-3.html">Models</a></li>
                     <li><a href="chapter-4.html">Django Templates</a></li>
                     <li><a href="chapter-5.html">URLs and Views</a></li>
-                    <li><a href="chapter-6.html">6</a></li>
-                    <li><a href="chapter-7.html">7</a></li>
-                    <li><a href="chapter-8.html">8</a></li>
-                    <li><a href="chapter-9.html">9</a></li>
+                    <li><a href="chapter-6.html">Links and Redirects</a></li>
+                    <li><a href="">7</a></li>
                 </ul>
             </div>                      
             <div class="burger">
@@ -176,6 +175,7 @@ class Template(builtins.object)
 
   __weakref__
       list of weak references to the object (if defined)
+      
 </code></pre>
 
 <h2 class="second-heading">Context class</h2>
@@ -198,7 +198,7 @@ class Context(BaseContext)
   def __copy__(self):
 
   def __init__(self, dict_=None, autoescape=True, 
-               current_app=< object object at 0x00000036BA23C640>, 
+               current_app=< object object at 0>, 
                use_l10n=None, use_tz=None):
       Initialize self.  See help(type(self)) for accurate signature.
 
@@ -258,6 +258,7 @@ class Context(BaseContext)
   Data and other attributes inherited from BaseContext:
 
   __hash__ = None
+
 </code></pre>
 
 <h2 class="second-heading">django.template.loader module</h2> <p>     There are
@@ -285,8 +286,9 @@ FUNCTIONS
       Loads and returns a template for one of the given names.
       Tries names in order and returns the first template found.         
       Raises TemplateDoesNotExist if no such template exists. 
-</code></pre>
 
+</code></pre>
+<p>&nbsp;</p>
 </div>
 
     <script src="highlight.pack.js"></script>

@@ -17,13 +17,12 @@ type='text/css'>
             <div class="circle"></div>
             <div class="menu">
                 <ul>
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="chapter-4.html">4</a></li>
-                    <li><a href="chapter-5.html">5</a></li>
-                    <li><a href="chapter-6.html">6</a></li>
-                    <li><a href="chapter-7.html">7</a></li>
-                    <li><a href="chapter-8.html">8</a></li>
-                    <li><a href="chapter-9.html">9</a></li>
+                    <li><a href="index.html" id="home">Home</a></li>
+                    <li><a href="chapter-3.html">Models</a></li>
+                    <li><a href="chapter-4.html">Django Templates</a></li>
+                    <li><a href="chapter-5.html">URLs and Views</a></li>
+                    <li><a href="chapter-6.html">Links and Redirects</a></li>
+                    <li><a href="">7</a></li>
                 </ul>
             </div>                      
             <div class="burger">
@@ -38,18 +37,82 @@ type='text/css'>
 <h1 class="lesson-title">Creating Links <br>between Webpages</h1>              
 <h2 class="second-heading">Key Points</h2>
 <ol>
-  <li></li>
+  <li>reverse() Function</li>
+  <li>url Template Tag</li>
+  <li>get_absolute_url() Method</li>
+  <li>redirect() Function</li>
 </ol>
 
-<h2 class="second-heading">Introduction</h2>
-
-<h2 class="second-heading"></h2>
-
-           
+<h2 class="second-heading">reverse() Function</h2>
+<p>
+    This reverse() function in Django takes a name of any URL and returns its path. The reverse() is used to adhere to the DRY principle i.e if you change the url in future, then you can reference that url using reverse(urlname). It accepts a URL pattern name or the callable view object as an argument. For example, given the following url:
+</p>
 <pre><code class="language-python">
+from news import views
+
+path('archive/', views.archive, name='news-archive')
+
+</code></pre>
+ 
+<p>you can use any of the following to reverse the URL:</p>
+<pre><code class="language-python">
+from django.core.urlresolvers import reverse # in older versions
+from django.urls import reverse              # in version 2.0
+# using the named URL
+reverse('news-archive')
+
+# passing a callable object
+# (This is discouraged because you can't reverse namespaced views this way.)
+from news import views
+reverse(views.archive)
+
+</code></pre>
+<p>If the URL accepts arguments, you may pass them in args. For example:</p>
+<pre><code class="language-python">
+from django.urls import reverse
+
+def myview(request):
+    return HttpResponseRedirect(reverse('arch-summary', args=[1945]))
     
 </code></pre>
-    </div>
+
+<p>You can also pass kwargs instead of args. For example:</p>
+
+<pre><code class="language-python">
+>>> reverse('admin:app_list', kwargs={'app_label': 'auth'})
+'/admin/auth/'
+
+</code></pre>
+<p><a href="https://docs.djangoproject.com/en/2.1/ref/urlresolvers/">This </a>is a link to the docs.</p>
+<h2 class="second-heading">url Template Tag</h2>
+<p>
+    The Django Template Language supplies the url template tag, which works exactly like
+    reverse() (because it uses reverse() internally). Like any other template tag, the url tag is expressed via {% expression %} and expects any string arguments to be encompassed by single or double quotes and separated by spaces. <br>
+    It returns an absolute path reference (a URL without the domain name) matching a given view and optional parameters. Any special characters in the resulting path will be encoded using iri_to_uri(). <br>
+
+    This is a way to output links without violating the DRY principle by having to hard-code URLs in your templates: 
+</p>
+<pre><code class="language-python">
+{% url 'some-url-name' v1 v2 %}
+
+{% url 'some-url-name' arg1=v1 arg2=v2 %} # keyword syntax
+
+</code></pre>
+<h2 class="second-heading">get_absolute_url() Method</h2>
+<p>
+     If it makes sense for your model’s instances to each have a unique URL, you should define get_absolute_url(). <br>
+     When using reverse() for object/detail pages you have to manually pass the arg(s), which could be an ID or slug or whatever, but if you implement get_absolute_url() in your model, you define it once and you don't need to repeat yourself to pass the arg(s).
+     For example:
+</p>
+<pre><code class="language-python">
+def get_absolute_url(self):
+    from django.urls import reverse
+    return reverse('people.views.details', args=[str(self.id)])
+
+</code></pre>
+<h2 class="second-heading">redirect() Function</h2>
+
+</div>
 
     <script src="highlight.pack.js"></script>
     <script>hljs.initHighlightingOnLoad();</script>
