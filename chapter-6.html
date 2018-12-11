@@ -111,7 +111,51 @@ def get_absolute_url(self):
 
 </code></pre>
 <h2 class="second-heading">redirect() Function</h2>
+<p>
+    It returns an HttpResponseRedirect to the appropriate URL for the arguments passed.
 
+    The arguments could be:</p>
+
+    <ul id="short-list"><li>A model: the model’s get_absolute_url() function will be called.</li>
+    <li>A view name, possibly with arguments: reverse() will be used to reverse-resolve the name.</li>
+    <li>An absolute or relative URL, which will be used as-is for the redirect location.</li></ul>
+<p>
+    By default issues a temporary redirect; pass permanent=True to issue a permanent redirect. <br>
+
+    You can use the redirect() function in a number of ways. <br>
+
+    By passing some object; that object’s get_absolute_url() method will be called to figure out the redirect URL:
+</p>
+<pre><code class="language-python">
+from django.shortcuts import redirect
+
+def my_view(request):
+    ...
+    obj = MyModel.objects.get(...)
+    return redirect(obj)
+
+</code></pre>
+<p>By passing the name of a view and optionally some positional or keyword arguments; the URL will be reverse resolved using the reverse() method:</p>
+<pre><code class="language-python">
+def my_view(request):
+    ...
+    return redirect('some-view-name', foo='bar')
+
+</code></pre>
+<p>By passing a hardcoded URL to redirect to:</p>
+<pre><code class="language-python">
+def my_view(request):
+    ...
+    return redirect('/some/url/')
+
+# also works with full URLs:
+
+def my_view(request):
+    ...
+    return redirect('https://example.com/')
+
+</code></pre>
+<p>&nbsp;</p>
 </div>
 
     <script src="highlight.pack.js"></script>
