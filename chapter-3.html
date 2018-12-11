@@ -6,13 +6,13 @@
 <link href="https://fonts.googleapis.com/css?family=Montserrat:Light|Open+Sans|Nunito+Sans"
 rel="stylesheet">     
 <link rel="stylesheet" href="master.css">
-<title></title>   
+<title>Django Models</title>   
 </head>   
 <body>     
 <div class="main-container">
      
 <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' 
-type='text/css'>    
+type='text/css'>  
         <div class="screen">
             <div class="navbar"></div>     
             <div class="circle"></div>
@@ -89,7 +89,7 @@ class Post(models.Model):
 
 </code></pre>
 <p>Here is a list of all field types and options:</p>
-  <h3 class='third-heading'>Field Types</h3>
+  <h3 class="third-heading">Field Types</h3>
   <ul>
     <li>AutoField</li> 
     <li>BigAutoField</li>
@@ -141,9 +141,8 @@ class Post(models.Model):
     <li>verbose_name</li>
     <li>validators</li>
   </ul>
-<p><a href="https://docs.djangoproject.com/en/2.1/ref/models/fields/">This</a> is a link to the documentation where you can find all the details of the model field types and options.<br>
-<a href="model_instance_help.html">This</a> is a link to Help on class Model itself.
-</p>
+<p><a href="https://docs.djangoproject.com/en/2.1/ref/models/fields/">This</a> is a link to the documentation where you can find all the details of the model field types and options.</p>
+<p><a href="model_instance_help.html">This</a> is a link to Help on class Model itself.</p>
 <h2 class="second-heading">Metadata</h2>
 <p>Here is a list of all possible metadata options that can be used for a model
 in its internal class Meta:</p>
@@ -173,7 +172,8 @@ in its internal class Meta:</p>
     <li>label</li>
     <li>label_lower</li>
   </ul>
-<p><a href="https://docs.djangoproject.com/en/2.1/ref/models/options/">This</a> is a link to the documentation where you can find all the details of the model meta options.
+<p>
+    <a href="https://docs.djangoproject.com/en/2.1/ref/models/options/">This</a> is a link to the documentation where you can find all the details of the model meta options.
 </p>
 <h2 class="second-heading">Methods</h2>
 <p>
@@ -184,7 +184,7 @@ in its internal class Meta:</p>
 </p>
 <h2 class="second-heading">Relationships</h2>
 <p>
-    There are three types of model relationships in Django. An object can be related to one other object. It is a OneToOne relationship. An object can be related to many other objects. It is a ManyToOne relationship. Many objects can be related to many other objects. It is a ManyToMany relationship. These relationships are expressed by OneToOneField, ForeignKey and ManyToManyField field types respectively. ForeignKey must be added to the many side of the relationship. In the other two cases, you have a choice.
+    There are three types of model relationships in Django. An object can be related to one other object. It is a OneToOne relationship. An object can be related to many other objects. It is a ManyToOne relationship. Many objects can be related to many other objects. It is a ManyToMany relationship. These relationships are expressed by OneToOneField, ForeignKey and ManyToManyField field types respectively. ForeignKey must be added to the many side of the relationship. In the other two cases, you have a choice.</p>
 <p>Here are the links to the documentation where you can find all the details of the model relationships:<br>
 <a href="https://docs.djangoproject.com/en/2.1/topics/db/examples/one_to_one/">OneToOne Relationships</a><br>
 <a href="https://docs.djangoproject.com/en/2.1/topics/db/examples/many_to_one/">ManyToOne Relationships</a><br>
