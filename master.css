@@ -7,6 +7,7 @@ body {
   width: 64%;
   margin: 0 auto;
   background: #e8eef7;
+  background: #fff;
   padding-left: 25px;
   padding-right: 25px;
   margin-top: 75px;
@@ -59,7 +60,7 @@ ol, ul {
 
 pre {
   max-width: 800px;
-  border: white 3px solid;
+  border: #9bb7de 3px solid;
   word-wrap: break-word;
 }
 
