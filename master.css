@@ -1,5 +1,10 @@
 body {
   background: #dbe5f3;
+  background: url(geo2.png) no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
   margin: 0px;
   padding: 0px;
 }
@@ -80,6 +85,21 @@ ul li {
   display: list-item;
 }
 
+div.navbar{
+  height:75px; 
+  width: 68%;
+  background:#385e97; 
+  margin-top: 0px; 
+  padding: 0px;
+  top: 0px;
+  left: 19%;
+  right: 19%;
+  margin-left: -3%;
+  margin-right: -3%;
+  position: fixed;
+  opacity: .90;
+}
+
 div.burger {
   height: 60px; 
   width: 60px;
@@ -155,20 +175,6 @@ div.burger {
          -o-transition: all 100ms ease-out;
             transition: all 100ms ease-out;         
   }
-
-div.navbar{
-  height:75px; 
-  width: 68%;
-  background:#385e97; 
-  margin-top: 0px; 
-  padding: 0px;
-  top: 0px;
-  left: 19%;
-  right: 19%;
-  margin-left: -3%;
-  margin-right: -3%;
-  position: fixed;
-}
 
 div.circle{ 
   border-radius: 50%;
